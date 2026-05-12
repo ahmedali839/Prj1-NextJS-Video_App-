@@ -142,12 +142,12 @@ const FileUpload = ({ onSuccess, onProgress, fileType }: FileUploadProps) => {
       const auth = await authRes.json();
 
       await upload({
-        expire,
-        token,
-        signature,
-        publicKey,
         file,
         fileName:file.name,
+        publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
+        signature: auth.signature,
+        expire,
+        token,
 
         onProgress: (event) => {
           setProgres({event.loaded / event.target} * 100);
