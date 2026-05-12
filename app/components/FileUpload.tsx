@@ -146,8 +146,8 @@ const FileUpload = ({ onSuccess, onProgress, fileType }: FileUploadProps) => {
         fileName:file.name,
         publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
         signature: auth.signature,
-        expire,
-        token,
+        expire: auth.expire,
+        token: auth.token,
 
         onProgress: (event) => {
           setProgres({event.loaded / event.target} * 100);
