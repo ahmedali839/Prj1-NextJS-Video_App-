@@ -141,20 +141,28 @@ const FileUpload = ({ onSuccess, onProgress, fileType }: FileUploadProps) => {
       const authRes = await fetch("/api/auth/imagekit-auth");
       const auth = await authRes.json();
 
-      await upload({
+      const response = await upload({
         file,
-        fileName:file.name,
-        publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY,
+        fileName: file.name,
+        publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY!,
         signature: auth.signature,
         expire: auth.expire,
         token: auth.token,
 
         onProgress: (event) => {
-          setProgres({event.loaded / event.target} * 100);
-        }
-        
-      })
-    } catch (error) {}
+          if (event.lengthComputable && onProgress) {
+            const percent = (event.loaded / event.total) * 100;
+            onProgress(Math.round(percent));
+          }
+        },
+      });
+
+      onSuccess(response);
+    } catch (error) {
+      console.error("Uploading Failed", error);
+    } finally {
+      setUploading(false);
+    }
   };
 
   return (
