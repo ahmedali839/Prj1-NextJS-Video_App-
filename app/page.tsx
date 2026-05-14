@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Home() {
 
-  const dataType = Number(5);
+  const dataType = JSON.parse(5);
   console.log(typeof(dataType));
   
 
